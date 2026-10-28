@@ -23,7 +23,15 @@ def test_parse_time_invalid_time():
         parse_time("05::")
         parse_time("28:05")
         parse_time("22:95")
-
+    with pytest.raises(ValueError, match = "Hour must be between 0 and 23."):
+        parse_time("26:31")
+    with pytest.raises(ValueError, match = "Minute must be between 0 and 59."):
+        parse_time("22:91")
+    with pytest.raises(ValueError, match = "Hour and minute must be numeric."):
+        parse_time("www:ww")
+    with pytest.raises(ValueError, match = "Time must have HH:MM format."):
+        parse_time("1332")
+        
 def test_parse_measurement_regular_line():
     assert parse_measurement("Köln;14:21;21.7") == ("Köln", 861, 21.7)
     assert parse_measurement("Köln  ;  14:21;21.7 ") == ("Köln", 861, 21.7)
